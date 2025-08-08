@@ -102,11 +102,19 @@ export default function Actors() {
           />
         </div>
         {isLoading ? (
-        <Loader message="Fetching actors..." />
-      ) : (
-          <>
-        <NotFoundText visible={resultNotFound} text="Record not found" />
+  <Loader message="Fetching actors..." />
+) : (
+  <>
+    <NotFoundText visible={resultNotFound} text="Record not found" />
 
+    {(!actorList || actorList.length === 0) ? (
+      <div className="flex items-center justify-center h-[80vh]">
+        <p className="text-3xl font-semibold text-center bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 bg-clip-text text-transparent dark:from-pink-400 dark:via-purple-400 dark:to-indigo-400">
+          No actors listed yet 🎭
+        </p>
+      </div>
+    ) : (
+      <>
         <div className="grid grid-cols-4 gap-5">
           {actorList.map((actor) => (
             <ActorProfile
@@ -125,8 +133,10 @@ export default function Actors() {
             onPrevClick={handleOnPrevClick}
           />
         )}
-          </>
-        )}
+      </>
+    )}
+  </>
+)}
       </div>
 
       <ConfirmModal

@@ -13,7 +13,6 @@ import AdminNavigator from "./navigator/AdminNavigator";
 import SingleMovie from "./components/user/SingleMovie";
 import MovieReviews from "./components/user/MovieReviews";
 import SearchMovies from "./components/user/SearchMovies";
-
 export default function App() {
   const { authInfo } = useAuth();
   const isAdmin = authInfo.profile?.role === "admin";
@@ -22,6 +21,7 @@ export default function App() {
 
   return (
     <>
+    
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />

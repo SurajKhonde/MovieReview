@@ -118,7 +118,16 @@
     transform: translateX(100%);
   }
 }
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+  }
 
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

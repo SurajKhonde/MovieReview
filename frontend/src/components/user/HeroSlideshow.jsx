@@ -122,7 +122,20 @@ export default function HeroSlidShow() {
       updateUpNext(count);
     } else pauseSlideShow();
   }, [slides.length, visible]);
-
+  if (!slides.length) {
+    return (
+      <div className="w-full flex items-center justify-center h-[70vh]">
+        <div className="text-center animate-fade-in">
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent dark:from-blue-400 dark:via-purple-400 dark:to-pink-400">
+            No movies to display right now 🎬
+          </h2>
+          <p className="mt-2 text-gray-600 dark:text-gray-300">
+            Please check back later or upload new content!
+          </p>
+        </div>
+      </div>
+    );
+  };
   return (
     <div className="w-full flex">
       {/* Slide show section */}

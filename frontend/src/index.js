@@ -8,16 +8,19 @@ import {
 
 import "./index.css";
 import ContextProviders from "./context";
+import ErrorBoundary from "./components/ErrorBoundary";
 const queryClient = new QueryClient();
 const rootElement = document.getElementById("root");
 const root = ReactDOM.createRoot(rootElement);
 
 root.render(
   <QueryClientProvider client={queryClient}>
+    <ErrorBoundary>
   <BrowserRouter>
     <ContextProviders>
       <App />
     </ContextProviders>
   </BrowserRouter>
+  </ErrorBoundary>
   </QueryClientProvider>
 );
