@@ -1,53 +1,72 @@
----
+name: "💡 Feature Request"
+description: "Suggest a new feature or improvement for this project"
+title: "[Feature] Real-Time Chat with WebSockets"
+labels: [feature, enhancement, websocket, typescript]
+assignees: []
 
-# 💡 Feature: Real-Time Chat with WebSockets (Fan Club)
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 💬 Feature: Real-Time Chat with WebSockets (Fan Club)
 
-## 💡 Is your feature request related to a problem?
+        Thanks for suggesting a feature! Please fill in the details below to help us understand and plan this better.
 
-Yes. Our current platform lacks real-time communication, which limits interaction among fans. A static comment system or page reloads break the flow of conversation.
+  - type: textarea
+    id: related-problem
+    attributes:
+      label: "Is your feature request related to a problem?"
+      description: "Describe the problem or limitation this feature would solve."
+      placeholder: "E.g. I'm always frustrated when fan club members can't chat during events..."
+    validations:
+      required: true
 
-This makes it hard for fan club members to engage with each other live during events or discussions.
+  - type: textarea
+    id: solution
+    attributes:
+      label: "Describe the solution you'd like"
+      description: "Explain your proposed solution. What should happen? What technologies do you suggest?"
+      placeholder: "I'd like to add a real-time chat using WebSocket (e.g., Socket.IO), with typing indicators..."
+    validations:
+      required: true
 
----
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Describe alternatives you've considered"
+      description: "List any other approaches or technologies you thought of or tried."
+      placeholder: "I considered long-polling, or Discord embeds..."
+    validations:
+      required: false
 
-## ✅ Describe the solution you'd like
+  - type: textarea
+    id: context
+    attributes:
+      label: "Additional context"
+      description: "Any screenshots, diagrams, or context you'd like to provide?"
+      placeholder: "This feature aligns with our engagement goals. Could later support emoji reactions, etc."
+    validations:
+      required: false
 
-We want to introduce a **WebSocket-based real-time chat feature** (like a live chat room) for users in the fan club section.
+  - type: checkboxes
+    id: technologies
+    attributes:
+      label: "What technologies are involved?"
+      description: "Check the technologies relevant to this feature."
+      options:
+        - label: Node.js
+          required: false
+        - label: Socket.IO or native WebSocket
+        - label: React
+        - label: TypeScript (Frontend)
+        - label: TypeScript (Backend)
+        - label: Frontend State Management (e.g., Redux or Context API)
 
-- Enable real-time text communication
-- Show when users are typing ("user is typing..." indicators)
-- Optionally support rooms (e.g., per movie, actor, genre)
-- Future scope: emoji reactions, moderation tools
-
-This feature should be built with:
-- **Node.js + WebSocket server (e.g., Socket.IO)**
-- **React frontend with TypeScript**
-- **Modular and scalable code structure**
-
----
-
-## 🔄 Describe alternatives you’ve considered
-
-- Using HTTP long-polling or AJAX (but this adds more server strain and poor UX)
-- Using 3rd-party chat embeds like Discord, but that takes users off-platform
-
-WebSockets are best for performance, UX, and long-term maintainability.
-
----
-
-## 📎 Additional context
-
-This feature aligns with our goal of making the platform more engaging and interactive for movie fans.
-
-We'll need to handle:
-- WebSocket server setup
-- Authenticated connections
-- Frontend chat UI with state management
-- Error handling and graceful disconnection
-
-We plan to build this using **TypeScript** on both client and server sides for type safety and maintainability.
-
----
-
-- **Related Issues**: N/A
-
+  - type: input
+    id: github-username
+    attributes:
+      label: "GitHub Username (optional)"
+      description: "Add your username if you'd like to be assigned or contribute to this feature."
+      placeholder: "@your-username"
+    validations:
+      required: false
