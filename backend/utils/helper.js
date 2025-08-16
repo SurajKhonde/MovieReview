@@ -118,21 +118,21 @@ exports.topRatedMoviesPipeline = (type) => {
   return [
     {
       $lookup: {
-        from: "Movie",
-        localField: "reviews",
-        foreignField: "_id",
-        as: "topRated",
+        from: "reviews",           // 👈 actual collection name
+        localField: "reviews",     // 👈 field in movies (array of review IDs)
+        foreignField: "_id",       // 👈 field in reviews
+        as: "joinedReviews",       // 👈 name the output field
       },
     },
     {
-      $match: matchOptions,
+      $match: matchOptions,        // apply your filters (optional)
     },
     {
       $project: {
         title: 1,
         poster: "$poster.url",
         responsivePosters: "$poster.responsive",
-        reviewCount: { $size: "$reviews" },
+        reviewCount: { $sum: "$joinedReviews" }, // 👈 count of reviews
       },
     },
     {

@@ -1,5 +1,7 @@
 const { isValidObjectId } = require("mongoose");
 const Actor = require("../models/actor");
+const { clearActorCache } = require("../utils/cacheHelper");
+const clientPromise = require("../utils/redisClient");
 const {
   sendError,
   uploadImageToCloud,
@@ -8,9 +10,9 @@ const {
 const cloudinary = require("../cloud");
 
 exports.createActor = async (req, res) => {
+  
   const { name, about, gender } = req.body;
   const { file } = req;
-
   const newActor = new Actor({ name, about, gender });
 
   if (file) {
@@ -18,6 +20,7 @@ exports.createActor = async (req, res) => {
     newActor.avatar = { url, public_id };
   }
   await newActor.save();
+  await clearActorCache();;
   res.status(201).json({ actor: formatActor(newActor) });
 };
 
@@ -57,7 +60,7 @@ exports.updateActor = async (req, res) => {
   actor.gender = gender;
 
   await actor.save();
-
+  await clearActorCache();
   res.status(201).json({ actor: formatActor(actor) });
 };
 
@@ -80,7 +83,7 @@ exports.removeActor = async (req, res) => {
   }
 
   await Actor.findByIdAndDelete(actorId);
-
+  await clearActorCache();
   res.json({ message: "Record removed successfully." });
 };
 
@@ -105,17 +108,34 @@ exports.getLatestActors = async (req, res) => {
 };
 
 exports.getSingleActor = async (req, res) => {
+  const client = await clientPromise;
   const { id } = req.params;
-
+  const cacheKey = `actor:${id}`;
+  const cached = await client.get(cacheKey);
+  
   if (!isValidObjectId(id)) return sendError(res, "Invalid request!");
-
+  if (cached) {
+    console.log("⚡ Single actor from cache");
+    return res.json({ actor: JSON.parse(cached) });
+  };
   const actor = await Actor.findById(id);
+  
   if (!actor) return sendError(res, "Invalid request, actor not found!", 404);
-  res.json({ actor: formatActor(actor) });
+  const formatted = formatActor(actor);
+  await client.setEx(cacheKey, 3600, JSON.stringify(formatted));
+  res.json({ actor: formatted });
+
 };
 
 exports.getActors = async (req, res) => {
+  const client = await clientPromise; // wait for redis connection
   const { pageNo, limit } = req.query;
+  const cacheKey = `actors:${pageNo}:${limit}`;
+  const cached = await client.get(cacheKey);
+  if (cached) {
+    console.log("⚡ From cache");
+    return res.json(JSON.parse(cached));
+  }
 
   const actors = await Actor.find({})
     .sort({ createdAt: -1 })
@@ -123,7 +143,8 @@ exports.getActors = async (req, res) => {
     .limit(parseInt(limit));
 
   const profiles = actors.map((actor) => formatActor(actor));
-  res.json({
-    profiles,
-  });
+  const response = { profiles };
+  await client.setEx(cacheKey, 3600, JSON.stringify(response));
+
+  res.json(response);
 };

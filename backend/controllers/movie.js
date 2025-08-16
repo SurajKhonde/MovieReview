@@ -502,7 +502,6 @@ exports.getTopRatedMovies = async (req, res) => {
   const { type = "Film" } = req.query;
 
   const movies = await Movie.aggregate(topRatedMoviesPipeline(type));
-
   const mapMovies = async (m) => {
     const reviews = await getAverageRatings(m._id);
 
@@ -516,7 +515,7 @@ exports.getTopRatedMovies = async (req, res) => {
   };
 
   const topRatedMovies = await Promise.all(movies.map(mapMovies));
-
+console.log(topRatedMovies,"sdsdsdsd")
   res.json({ movies: topRatedMovies });
 };
 
